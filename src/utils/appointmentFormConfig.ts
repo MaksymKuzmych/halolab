@@ -31,5 +31,7 @@ export const validationSchema = object().shape({
   city: string().required(`${'Required'}`),
   doctor: string().required(`${'Required'}`),
   email: contactSchema.email('Invalid email'),
-  phoneNumber: contactSchema.max(18, 'Phone number must be at most 18 digits'),
+  phoneNumber: contactSchema
+    .min(8, 'Phone number must be at least 8 digits')
+    .max(18, 'Phone number must be at most 18 digits'),
 });
