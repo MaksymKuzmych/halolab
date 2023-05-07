@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import { Button, CircularProgress, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -10,14 +10,40 @@ import { GENDERS } from '../../constants';
 import { initialValues, validationSchema } from '../../utils/appointmentFormConfig';
 import { IAppointmentFormData } from '../../interfaces';
 import { useAppointmentQueries } from '../../hooks/useAppointmentQueries';
+import {
+  appointmentReducer,
+  initialState,
+  setCities,
+  setDoctors,
+  setSpecialties,
+} from '../../reducers/appointmentReducer';
 
 import styles from './AppointmentForm.module.scss';
 
 export const AppointmentForm = () => {
+  const [state, dispatch] = useReducer(appointmentReducer, initialState);
   const resultQueries = useAppointmentQueries();
   const [citiesQuery, specialtiesQuery, doctorsQuery] = resultQueries;
   const isLoading = resultQueries.some((query) => query.isLoading);
   const isError = resultQueries.some((query) => query.isError);
+
+  useEffect(() => {
+    if (citiesQuery.data) {
+      dispatch(setCities(citiesQuery.data));
+    }
+  }, [citiesQuery.data]);
+
+  useEffect(() => {
+    if (specialtiesQuery.data) {
+      dispatch(setSpecialties(specialtiesQuery.data));
+    }
+  }, [specialtiesQuery.data]);
+
+  useEffect(() => {
+    if (doctorsQuery.data) {
+      dispatch(setDoctors(doctorsQuery.data));
+    }
+  }, [doctorsQuery.data]);
 
   const formik = useFormik({
     initialValues,
@@ -76,19 +102,19 @@ export const AppointmentForm = () => {
       />
       <CustomSelect
         title='City'
-        options={citiesQuery.data}
+        options={state.cities}
         formikProps={formik.getFieldProps('city')}
         errorHandler={errorHandler}
       />
       <CustomSelect
         title='Doctor Specialty'
-        options={specialtiesQuery.data}
+        options={state.specialties}
         formikProps={formik.getFieldProps('doctorSpecialty')}
         errorHandler={errorHandler}
       />
       <CustomSelect
         title='Doctor'
-        options={doctorsQuery.data}
+        options={state.doctors}
         formikProps={formik.getFieldProps('doctor')}
         errorHandler={errorHandler}
       />
