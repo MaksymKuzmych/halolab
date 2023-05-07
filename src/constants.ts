@@ -1,7 +1,7 @@
 import { IGender } from './interfaces';
 
-export const CITY_API_URL = 'https://run.mocky.io/v3/9fcb58ca-d3dd-424b-873b-dd3c76f000f4';
-export const SPECIALTY_API_URL = 'https://run.mocky.io/v3/e8897b19-46a0-4124-8454-0938225ee9ca';
+export const CITIES_API_URL = 'https://run.mocky.io/v3/9fcb58ca-d3dd-424b-873b-dd3c76f000f4';
+export const SPECIALTIES_API_URL = 'https://run.mocky.io/v3/e8897b19-46a0-4124-8454-0938225ee9ca';
 export const DOCTORS_API_URL = 'https://run.mocky.io/v3/e8897b19-46a0-4124-8454-0938225ee9ca';
 
 export const GENDERS: IGender[] = [

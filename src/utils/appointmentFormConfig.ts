@@ -13,7 +13,7 @@ export const initialValues: IAppointmentFormData = {
   phoneNumber: '',
 };
 
-const contactSchema = string().test(
+const contactsSchema = string().test(
   'Email or phone',
   'At least one of the email or phone is required',
   (item, testContext) => {
@@ -30,8 +30,8 @@ export const validationSchema = object().shape({
   sex: string().required(`${'Required'}`),
   city: string().required(`${'Required'}`),
   doctor: string().required(`${'Required'}`),
-  email: contactSchema.email('Invalid email'),
-  phoneNumber: contactSchema
+  email: contactsSchema.email('Invalid email'),
+  phoneNumber: contactsSchema
     .min(8, 'Phone number must be at least 8 digits')
     .max(18, 'Phone number must be at most 18 digits'),
 });

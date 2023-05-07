@@ -16,7 +16,7 @@ import styles from './AppointmentForm.module.scss';
 export const AppointmentForm = () => {
   const resultQueries = useAppointmentQueries();
   const [citiesQuery, specialtiesQuery, doctorsQuery] = resultQueries;
-  const isFetching = resultQueries.some((query) => query.isFetching);
+  const isLoading = resultQueries.some((query) => query.isLoading);
   const isError = resultQueries.some((query) => query.isError);
 
   const formik = useFormik({
@@ -35,7 +35,7 @@ export const AppointmentForm = () => {
     [formik.touched, formik.errors],
   );
 
-  if (isFetching) {
+  if (isLoading) {
     return <CircularProgress />;
   }
 
