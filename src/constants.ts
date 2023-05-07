@@ -20,7 +20,7 @@ export const CITIES: ICity[] = [
   },
 ];
 
-export const SPECIALTY: ISpecialty[] = [
+export const SPECIALTIES: ISpecialty[] = [
   {
     id: '1',
     name: 'Therapist',

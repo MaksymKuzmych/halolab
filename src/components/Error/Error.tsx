@@ -1,3 +1,9 @@
+import styles from './Error.module.scss';
+
 export const Error = () => {
-  return <h2>Error</h2>;
+  return (
+    <div className={styles.wrapper}>
+      <h2>Something went wrong</h2>
+    </div>
+  );
 };
