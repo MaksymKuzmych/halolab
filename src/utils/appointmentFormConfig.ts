@@ -7,7 +7,7 @@ export const initialValues: IAppointmentFormData = {
   birthdayDate: null,
   sex: '',
   city: '',
-  doctorSpecialty: '',
+  doctorSpeciality: '',
   doctor: '',
   email: '',
   phoneNumber: '',
@@ -23,7 +23,7 @@ const contactsSchema = string().test(
 
 export const validationSchema = object().shape({
   name: string()
-    .matches(/^[aA-zZ\s]+$/, 'Only letters are allowed for this field')
+    .matches(/^[aA-zZ\s]+$/, 'Only english letters are allowed')
     .min(2, 'Name must be at least 2 characters')
     .required(`${'Required'}`),
   birthdayDate: string().required(`${'Required'}`),

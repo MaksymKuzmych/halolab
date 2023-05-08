@@ -6,26 +6,38 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { MuiTelInput } from 'mui-tel-input';
 
 import { CustomSelect } from './CustomSelect/CustomSelect';
-import { GENDERS } from '../../constants';
 import { initialValues, validationSchema } from '../../utils/appointmentFormConfig';
 import { IAppointmentFormData } from '../../interfaces';
 import { useAppointmentQueries } from '../../hooks/useAppointmentQueries';
 import {
   appointmentReducer,
+  filterByFields,
   initialState,
+  resetFields,
   setCities,
   setDoctors,
-  setSpecialties,
+  setSpecialities,
 } from '../../reducers/appointmentReducer';
 
 import styles from './AppointmentForm.module.scss';
 
 export const AppointmentForm = () => {
   const [state, dispatch] = useReducer(appointmentReducer, initialState);
+
   const resultQueries = useAppointmentQueries();
-  const [citiesQuery, specialtiesQuery, doctorsQuery] = resultQueries;
+  const [citiesQuery, specialitiesQuery, doctorsQuery] = resultQueries;
   const isLoading = resultQueries.some((query) => query.isLoading);
   const isError = resultQueries.some((query) => query.isError);
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      alert(JSON.stringify(values));
+      resetForm();
+      dispatch(resetFields());
+    },
+  });
 
   useEffect(() => {
     if (citiesQuery.data) {
@@ -34,10 +46,10 @@ export const AppointmentForm = () => {
   }, [citiesQuery.data]);
 
   useEffect(() => {
-    if (specialtiesQuery.data) {
-      dispatch(setSpecialties(specialtiesQuery.data));
+    if (specialitiesQuery.data) {
+      dispatch(setSpecialities(specialitiesQuery.data));
     }
-  }, [specialtiesQuery.data]);
+  }, [specialitiesQuery.data]);
 
   useEffect(() => {
     if (doctorsQuery.data) {
@@ -45,14 +57,23 @@ export const AppointmentForm = () => {
     }
   }, [doctorsQuery.data]);
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      alert(JSON.stringify(values));
-      resetForm();
-    },
-  });
+  useEffect(() => {
+    dispatch(
+      filterByFields({
+        birthdayDate: formik.values.birthdayDate,
+        sex: formik.values.sex,
+        city: formik.values.city,
+        doctorSpeciality: formik.values.doctorSpeciality,
+        doctor: formik.values.doctor,
+      }),
+    );
+  }, [
+    formik.values.birthdayDate,
+    formik.values.city,
+    formik.values.doctor,
+    formik.values.doctorSpeciality,
+    formik.values.sex,
+  ]);
 
   const errorHandler = useCallback(
     (name: keyof IAppointmentFormData) => {
@@ -60,6 +81,11 @@ export const AppointmentForm = () => {
     },
     [formik.touched, formik.errors],
   );
+
+  const handleResetForm = () => {
+    formik.resetForm();
+    dispatch(resetFields());
+  };
 
   if (isLoading) {
     return <CircularProgress />;
@@ -96,25 +122,27 @@ export const AppointmentForm = () => {
       </LocalizationProvider>
       <CustomSelect
         title='Sex'
-        options={GENDERS}
+        options={state.filteredGenders.length ? state.filteredGenders : state.genders}
         formikProps={formik.getFieldProps('sex')}
         errorHandler={errorHandler}
       />
       <CustomSelect
         title='City'
-        options={state.cities}
+        options={state.filteredCities.length ? state.filteredCities : state.cities}
         formikProps={formik.getFieldProps('city')}
         errorHandler={errorHandler}
       />
       <CustomSelect
-        title='Doctor Specialty'
-        options={state.specialties}
-        formikProps={formik.getFieldProps('doctorSpecialty')}
+        title='Doctor speciality'
+        options={
+          state.filteredSpecialities.length ? state.filteredSpecialities : state.specialities
+        }
+        formikProps={formik.getFieldProps('doctorSpeciality')}
         errorHandler={errorHandler}
       />
       <CustomSelect
         title='Doctor'
-        options={state.doctors}
+        options={state.filteredDoctors.length ? state.filteredDoctors : state.doctors}
         formikProps={formik.getFieldProps('doctor')}
         errorHandler={errorHandler}
       />
@@ -138,6 +166,15 @@ export const AppointmentForm = () => {
         helperText={errorHandler('phoneNumber') || ' '}
         error={!!errorHandler('phoneNumber')}
       />
+      <Button
+        variant='outlined'
+        fullWidth
+        sx={{ marginTop: '10px' }}
+        type='reset'
+        onClick={handleResetForm}
+      >
+        Reset form
+      </Button>
       <Button variant='contained' fullWidth sx={{ marginTop: '10px' }} type='submit'>
         Make an appointment
       </Button>

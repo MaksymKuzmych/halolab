@@ -1,12 +1,12 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 import { FieldInputProps } from 'formik';
 
-import { IAppointmentFormData, ICity, IDoctor, IGender, ISpecialty } from '../../../interfaces';
+import { IAppointmentFormData, ICity, IDoctor, IGender, ISpeciality } from '../../../interfaces';
 
 import styles from './CustomSelect.module.scss';
 
-type SelectOptions = (IGender | ICity | ISpecialty | IDoctor)[];
+type SelectOptions = (IGender | ICity | ISpeciality | IDoctor)[];
 
 interface ICustomSelectProps {
   title: string;
@@ -17,6 +17,7 @@ interface ICustomSelectProps {
 
 export const CustomSelect = memo(
   ({ title, options, formikProps, errorHandler }: ICustomSelectProps) => {
+    const { onChange } = formikProps;
     const error = errorHandler(formikProps.name as keyof IAppointmentFormData);
     const optionsLayout = useMemo(() => {
       return options.map((option) => {
@@ -27,7 +28,7 @@ export const CustomSelect = memo(
           surname = option.surname;
         }
 
-        const value = surname ? `${surname} ${name}` : name;
+        const value = surname ? `${name} ${surname}` : name;
 
         return (
           <MenuItem value={value} key={id}>
@@ -36,6 +37,28 @@ export const CustomSelect = memo(
         );
       });
     }, [options]);
+
+    useEffect(() => {
+      if (options.length === 1) {
+        const { name } = options[0];
+        let surname = null;
+
+        if ('surname' in options[0]) {
+          surname = options[0].surname;
+        }
+
+        const value = surname ? `${name} ${surname}` : name;
+
+        if (formikProps.value !== value) {
+          onChange({
+            target: {
+              name: formikProps.name,
+              value: value,
+            },
+          });
+        }
+      }
+    }, [formikProps.name, formikProps.value, onChange, options]);
 
     return (
       <FormControl fullWidth variant='standard' error={!!error}>

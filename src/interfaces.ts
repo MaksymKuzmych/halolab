@@ -1,8 +1,10 @@
 import { Dayjs } from 'dayjs';
 
+import { Genders } from './enums';
+
 export interface IGender {
   id: string;
-  name: string;
+  name: Genders.MALE | Genders.FEMALE;
 }
 
 export interface ICity {
@@ -10,11 +12,11 @@ export interface ICity {
   name: string;
 }
 
-export interface ISpecialty {
+export interface ISpeciality {
   id: string;
   name: string;
   params?: {
-    gender?: string;
+    gender?: Genders.MALE | Genders.FEMALE;
     maxAge?: number;
     minAge?: number;
   };
@@ -34,7 +36,7 @@ export interface IAppointmentFormData {
   birthdayDate: Dayjs | null;
   sex: string;
   city: string;
-  doctorSpecialty: string;
+  doctorSpeciality: string;
   doctor: string;
   email: string;
   phoneNumber: string;

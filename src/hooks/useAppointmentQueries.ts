@@ -1,7 +1,7 @@
 import { useQueries } from 'react-query';
 import axios from 'axios';
 
-import { CITIES_API_URL, DOCTORS_API_URL, SPECIALTIES_API_URL } from '../constants';
+import { CITIES_API_URL, DOCTORS_API_URL, SPECIALITIES_API_URL } from '../constants';
 
 export const useAppointmentQueries = () => {
   const queryConfigurations = [
@@ -10,8 +10,8 @@ export const useAppointmentQueries = () => {
       queryFn: () => axios.get(CITIES_API_URL).then((res) => res.data),
     },
     {
-      queryKey: ['specialties'],
-      queryFn: () => axios.get(SPECIALTIES_API_URL).then((res) => res.data),
+      queryKey: ['specialities'],
+      queryFn: () => axios.get(SPECIALITIES_API_URL).then((res) => res.data),
     },
     {
       queryKey: ['doctors'],
