@@ -3,14 +3,14 @@ import dayjs from 'dayjs';
 
 import { IAppointmentFormData, ICity, IDoctor, IGender, ISpeciality } from '../interfaces';
 import { GENDERS } from '../constants';
-import { Genders } from '../enums';
+import { ActionType, Gender } from '../enums';
 
 type Action =
-  | { type: 'SET_CITIES'; payload: ICity[] }
-  | { type: 'SET_SPECIALITIES'; payload: ISpeciality[] }
-  | { type: 'SET_DOCTORS'; payload: IDoctor[] }
-  | { type: 'FILTER_BY_FIELDS'; payload: Partial<IAppointmentFormData> }
-  | { type: 'RESET_FIELDS' };
+  | { type: ActionType.SET_CITIES; payload: ICity[] }
+  | { type: ActionType.SET_SPECIALITIES; payload: ISpeciality[] }
+  | { type: ActionType.SET_DOCTORS; payload: IDoctor[] }
+  | { type: ActionType.FILTER_BY_FIELDS; payload: Partial<IAppointmentFormData> }
+  | { type: ActionType.RESET_FIELDS };
 
 interface AppointmentState {
   genders: IGender[];
@@ -39,13 +39,13 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
   action,
 ) => {
   switch (action.type) {
-    case 'SET_CITIES':
+    case ActionType.SET_CITIES:
       return { ...state, cities: action.payload };
-    case 'SET_SPECIALITIES':
+    case ActionType.SET_SPECIALITIES:
       return { ...state, specialities: action.payload };
-    case 'SET_DOCTORS':
+    case ActionType.SET_DOCTORS:
       return { ...state, doctors: action.payload };
-    case 'FILTER_BY_FIELDS':
+    case ActionType.FILTER_BY_FIELDS:
       const { birthdayDate, sex, city, doctorSpeciality, doctor } = action.payload;
       let filteredGenders = [...state.genders];
       let filteredCities = [...state.cities];
@@ -80,11 +80,11 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
 
       if (sex) {
         filteredSpecialities = filteredSpecialities.filter((speciality) => {
-          if (sex === Genders.MALE) {
-            return speciality.params?.gender !== Genders.FEMALE;
+          if (sex === Gender.MALE) {
+            return speciality.params?.gender !== Gender.FEMALE;
           }
-          if (sex === Genders.FEMALE) {
-            return speciality.params?.gender !== Genders.MALE;
+          if (sex === Gender.FEMALE) {
+            return speciality.params?.gender !== Gender.MALE;
           }
           return true;
         });
@@ -163,21 +163,21 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
 };
 
 export const setCities = (cities: ICity[]): Action => {
-  return { type: 'SET_CITIES', payload: cities };
+  return { type: ActionType.SET_CITIES, payload: cities };
 };
 
 export const setSpecialities = (specialities: ISpeciality[]): Action => {
-  return { type: 'SET_SPECIALITIES', payload: specialities };
+  return { type: ActionType.SET_SPECIALITIES, payload: specialities };
 };
 
 export const setDoctors = (doctors: IDoctor[]): Action => {
-  return { type: 'SET_DOCTORS', payload: doctors };
+  return { type: ActionType.SET_DOCTORS, payload: doctors };
 };
 
 export const filterByFields = (value: Partial<IAppointmentFormData>): Action => {
-  return { type: 'FILTER_BY_FIELDS', payload: value };
+  return { type: ActionType.FILTER_BY_FIELDS, payload: value };
 };
 
 export const resetFields = (): Action => {
-  return { type: 'RESET_FIELDS' };
+  return { type: ActionType.RESET_FIELDS };
 };
