@@ -109,6 +109,7 @@ export const AppointmentForm = () => {
         <DesktopDatePicker
           label='Birthday Date'
           format='DD/MM/YYYY'
+          disableFuture
           value={formik.values.birthdayDate}
           onChange={(value) => formik.setFieldValue('birthdayDate', value)}
           slotProps={{

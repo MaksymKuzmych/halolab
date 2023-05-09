@@ -9,3 +9,6 @@ export const GENDERS: IGender[] = [
   { id: '1', name: Gender.MALE },
   { id: '2', name: Gender.FEMALE },
 ];
+
+export const TEEN_AGE = 16;
+export const ELDER_AGE = 45;

@@ -3,7 +3,16 @@ import dayjs from 'dayjs';
 
 import { IAppointmentFormData, ICity, IDoctor, IGender, ISpeciality } from '../interfaces';
 import { GENDERS } from '../constants';
-import { ActionType, Gender } from '../enums';
+import { ActionType } from '../enums';
+import {
+  filterCitiesByDoctors,
+  filterDoctorsByCity,
+  filterDoctorsBySpecialities,
+  filterGendersBySpecialities,
+  filterSpecialitiesByAge,
+  filterSpecialitiesByDoctors,
+  filterSpecialitiesBySex,
+} from '../utils/filterFormFields';
 
 type Action =
   | { type: ActionType.SET_CITIES; payload: ICity[] }
@@ -54,93 +63,46 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
 
       if (birthdayDate) {
         const currentDate = dayjs();
-        const diffYears = currentDate.diff(birthdayDate, 'year');
+        const patientAge = currentDate.diff(birthdayDate, 'year');
 
-        filteredSpecialities = filteredSpecialities.filter((speciality) => {
-          if (speciality.params?.maxAge) {
-            return diffYears < speciality.params?.maxAge;
-          }
-          if (speciality.params?.minAge) {
-            return diffYears > speciality.params?.minAge;
-          }
-          return true;
-        });
-        filteredGenders = filteredGenders.filter((gender) => {
-          return filteredSpecialities.some(
-            (speciality) => speciality.params?.gender === gender.name,
-          );
-        });
-        filteredDoctors = filteredDoctors.filter((doctor) => {
-          return filteredSpecialities.some((speciality) => speciality.id === doctor.specialityId);
-        });
-        filteredCities = filteredCities.filter((city) => {
-          return filteredDoctors.some((doctor) => doctor.cityId === city.id);
-        });
+        filteredSpecialities = filterSpecialitiesByAge(filteredSpecialities, patientAge);
+        filteredGenders = filterGendersBySpecialities(filteredGenders, filteredSpecialities);
+        filteredDoctors = filterDoctorsBySpecialities(filteredDoctors, filteredSpecialities);
+        filteredCities = filterCitiesByDoctors(filteredCities, filteredDoctors);
       }
 
       if (sex) {
-        filteredSpecialities = filteredSpecialities.filter((speciality) => {
-          if (sex === Gender.MALE) {
-            return speciality.params?.gender !== Gender.FEMALE;
-          }
-          if (sex === Gender.FEMALE) {
-            return speciality.params?.gender !== Gender.MALE;
-          }
-          return true;
-        });
-        filteredDoctors = filteredDoctors.filter((doctor) => {
-          return filteredSpecialities.some((speciality) => speciality.id === doctor.specialityId);
-        });
-        filteredCities = filteredCities.filter((city) => {
-          return filteredDoctors.some((doctor) => doctor.cityId === city.id);
-        });
+        filteredSpecialities = filterSpecialitiesBySex(filteredSpecialities, sex);
+        filteredDoctors = filterDoctorsBySpecialities(filteredDoctors, filteredSpecialities);
+        filteredCities = filterCitiesByDoctors(filteredCities, filteredDoctors);
       }
 
       if (city) {
         const currectCity = filteredCities.find((filteredCity) => filteredCity.name === city);
-        const cityId = currectCity?.id;
 
-        filteredDoctors = filteredDoctors.filter((doctor) => doctor.cityId === cityId);
-        filteredSpecialities = filteredSpecialities.filter((speciality) => {
-          return filteredDoctors.some((doctor) => doctor.specialityId === speciality.id);
-        });
-        filteredGenders = filteredGenders.filter((gender) => {
-          return filteredSpecialities.some(
-            (speciality) => speciality.params?.gender === gender.name,
-          );
-        });
+        filteredDoctors = filterDoctorsByCity(filteredDoctors, currectCity!);
+        filteredSpecialities = filterSpecialitiesByDoctors(filteredSpecialities, filteredDoctors);
+        filteredGenders = filterGendersBySpecialities(filteredGenders, filteredSpecialities);
       }
 
       if (doctorSpeciality) {
-        const currectSpeciality = filteredSpecialities.find(
+        const currectSpeciality = filteredSpecialities.filter(
           (filteredDoctorSpeciality) => filteredDoctorSpeciality.name === doctorSpeciality,
         );
-        const currectSpecialityId = currectSpeciality?.id;
-        filteredGenders = filteredGenders.filter((gender) => {
-          return currectSpeciality?.params?.gender === gender.name;
-        });
-        filteredDoctors = filteredDoctors.filter(
-          (doctor) => doctor.specialityId === currectSpecialityId,
-        );
-        filteredCities = filteredCities.filter((city) => {
-          return filteredDoctors.some((doctor) => doctor.cityId === city.id);
-        });
+
+        filteredGenders = filterGendersBySpecialities(filteredGenders, currectSpeciality);
+        filteredDoctors = filterDoctorsBySpecialities(filteredDoctors, currectSpeciality);
+        filteredCities = filterCitiesByDoctors(filteredCities, filteredDoctors);
       }
 
       if (doctor) {
-        const currentDoctor = filteredDoctors.find(
+        const currentDoctor = filteredDoctors.filter(
           (filteredDoctor) => `${filteredDoctor.name} ${filteredDoctor.surname}` === doctor,
         );
 
-        filteredCities = filteredCities.filter((city) => currentDoctor?.cityId === city.id);
-        filteredSpecialities = filteredSpecialities.filter(
-          (speciality) => currentDoctor?.specialityId === speciality.id,
-        );
-        filteredGenders = filteredGenders.filter((gender) => {
-          return filteredSpecialities.some(
-            (speciality) => speciality.params?.gender === gender.name,
-          );
-        });
+        filteredCities = filterCitiesByDoctors(filteredCities, currentDoctor);
+        filteredSpecialities = filterSpecialitiesByDoctors(filteredSpecialities, currentDoctor);
+        filteredGenders = filterGendersBySpecialities(filteredGenders, filteredSpecialities);
       }
       return {
         ...state,
