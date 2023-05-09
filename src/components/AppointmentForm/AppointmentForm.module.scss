@@ -1,0 +1,12 @@
+@import '../../styles/variables.scss';
+
+.wrapper {
+  width: 310px;
+  padding: 20px;
+  background-color: $white;
+  border: 1px solid $black;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

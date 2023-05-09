@@ -1,0 +1,24 @@
+@import '../../styles/variables.scss';
+
+.footer {
+  background-color: $dark-gray;
+  color: $white;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.githubImg {
+  height: 50px;
+  width: 50px;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.copyright {
+  font-style: italic;
+}

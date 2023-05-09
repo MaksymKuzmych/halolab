@@ -1,0 +1,12 @@
+export enum Gender {
+  MALE = 'Male',
+  FEMALE = 'Female',
+}
+
+export enum ActionType {
+  SET_CITIES = 'SET_CITIES',
+  SET_SPECIALITIES = 'SET_SPECIALITIES',
+  SET_DOCTORS = 'SET_DOCTORS',
+  FILTER_BY_FIELDS = 'FILTER_BY_FIELDS',
+  RESET_FIELDS = 'RESET_FIELDS',
+}
