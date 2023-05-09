@@ -29,6 +29,7 @@ To run the project, follow these steps:
 [React-router-dom](https://reactrouter.com/en/main)
 
 ## Screenshots of Application
-![image](https://github.com/MaksymKuzmych/halolab/assets/94698037/e6e0e6ad-d43a-4c07-9fd4-56393e7fa6be)
+![image](https://github.com/MaksymKuzmych/halolab/assets/94698037/52eedeb6-f47d-431f-9767-491e24d392a8)
 
-![image](https://github.com/MaksymKuzmych/halolab/assets/94698037/7d1ee91d-69ce-45be-8dbb-216c64e4b3fc)
+![image](https://github.com/MaksymKuzmych/halolab/assets/94698037/269ceb2a-f0ac-42fc-91b8-a593c30da9de)
+
