@@ -51,8 +51,10 @@ export const filterSpecialitiesByDoctors = (specialities: ISpeciality[], doctors
 
 // Doctors
 
-export const filterDoctorsByCity = (doctors: IDoctor[], city: ICity) => {
-  return doctors.filter((doctor) => doctor.cityId === city.id);
+export const filterDoctorsByCity = (doctors: IDoctor[], cities: ICity[]) => {
+  return doctors.filter((doctor) => {
+    return cities.some((city) => doctor.cityId === city.id);
+  });
 };
 
 export const filterDoctorsBySpecialities = (doctors: IDoctor[], specialities: ISpeciality[]) => {

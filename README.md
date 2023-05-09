@@ -32,4 +32,3 @@ To run the project, follow these steps:
 ![image](https://github.com/MaksymKuzmych/halolab/assets/94698037/52eedeb6-f47d-431f-9767-491e24d392a8)
 
 ![image](https://github.com/MaksymKuzmych/halolab/assets/94698037/269ceb2a-f0ac-42fc-91b8-a593c30da9de)
-
