@@ -40,11 +40,12 @@ export const CustomSelect = memo(
 
     useEffect(() => {
       if (options.length === 1) {
-        const { name } = options[0];
+        const currentOption = options[0];
+        const { name } = currentOption;
         let surname = null;
 
-        if ('surname' in options[0]) {
-          surname = options[0].surname;
+        if ('surname' in currentOption) {
+          surname = currentOption.surname;
         }
 
         const value = surname ? `${name} ${surname}` : name;

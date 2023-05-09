@@ -104,6 +104,7 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
         filteredSpecialities = filterSpecialitiesByDoctors(filteredSpecialities, currentDoctor);
         filteredGenders = filterGendersBySpecialities(filteredGenders, filteredSpecialities);
       }
+
       return {
         ...state,
         filteredGenders,

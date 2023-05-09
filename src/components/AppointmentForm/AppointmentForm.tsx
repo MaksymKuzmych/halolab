@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { Button, CircularProgress, TextField } from '@mui/material';
 import { useFormik } from 'formik';
+import { Button, CircularProgress, TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { MuiTelInput } from 'mui-tel-input';
 
 import { CustomSelect } from './CustomSelect/CustomSelect';
+import { SuccessModal } from './SuccessModal/SuccessModal';
 import { initialValues, validationSchema } from '../../utils/appointmentFormConfig';
 import { IAppointmentFormData } from '../../interfaces';
 import { useAppointmentQueries } from '../../hooks/useAppointmentQueries';
@@ -20,7 +21,6 @@ import {
 } from '../../reducers/appointmentReducer';
 
 import styles from './AppointmentForm.module.scss';
-import { SuccessModal } from './SuccessModal/SuccessModal';
 
 export const AppointmentForm = () => {
   const [formValues, setFormValues] = useState<IAppointmentFormData>();

@@ -12,6 +12,11 @@
 .githubImg {
   height: 50px;
   width: 50px;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 .copyright {
