@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { Button, CircularProgress, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -20,8 +20,14 @@ import {
 } from '../../reducers/appointmentReducer';
 
 import styles from './AppointmentForm.module.scss';
+import { SuccessModal } from './SuccessModal/SuccessModal';
 
 export const AppointmentForm = () => {
+  const [formValues, setFormValues] = useState<IAppointmentFormData>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   const [state, dispatch] = useReducer(appointmentReducer, initialState);
 
   const resultQueries = useAppointmentQueries();
@@ -33,7 +39,8 @@ export const AppointmentForm = () => {
     initialValues,
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      alert(JSON.stringify(values));
+      setFormValues(values);
+      handleOpenModal();
       resetForm();
       dispatch(resetFields());
     },
@@ -96,89 +103,98 @@ export const AppointmentForm = () => {
   }
 
   return (
-    <form className={styles.wrapper} onSubmit={formik.handleSubmit}>
-      <TextField
-        fullWidth
-        label='Name'
-        variant='standard'
-        helperText={errorHandler('name') || ' '}
-        error={!!errorHandler('name')}
-        {...formik.getFieldProps('name')}
-      />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DesktopDatePicker
-          label='Birthday Date'
-          format='DD/MM/YYYY'
-          disableFuture
-          value={formik.values.birthdayDate}
-          onChange={(value) => formik.setFieldValue('birthdayDate', value)}
-          slotProps={{
-            textField: {
-              variant: 'standard',
-              helperText: errorHandler('birthdayDate') || ' ',
-              error: !!errorHandler('birthdayDate'),
-            },
-          }}
+    <>
+      <form className={styles.wrapper} onSubmit={formik.handleSubmit}>
+        <TextField
+          fullWidth
+          label='Name'
+          variant='standard'
+          helperText={errorHandler('name') || ' '}
+          error={!!errorHandler('name')}
+          {...formik.getFieldProps('name')}
         />
-      </LocalizationProvider>
-      <CustomSelect
-        title='Sex'
-        options={state.filteredGenders.length ? state.filteredGenders : state.genders}
-        formikProps={formik.getFieldProps('sex')}
-        errorHandler={errorHandler}
-      />
-      <CustomSelect
-        title='City'
-        options={state.filteredCities.length ? state.filteredCities : state.cities}
-        formikProps={formik.getFieldProps('city')}
-        errorHandler={errorHandler}
-      />
-      <CustomSelect
-        title='Doctor speciality'
-        options={
-          state.filteredSpecialities.length ? state.filteredSpecialities : state.specialities
-        }
-        formikProps={formik.getFieldProps('doctorSpeciality')}
-        errorHandler={errorHandler}
-      />
-      <CustomSelect
-        title='Doctor'
-        options={state.filteredDoctors.length ? state.filteredDoctors : state.doctors}
-        formikProps={formik.getFieldProps('doctor')}
-        errorHandler={errorHandler}
-      />
-      <TextField
-        fullWidth
-        id='email'
-        label='Email'
-        type='email'
-        variant='standard'
-        helperText={errorHandler('email') || ' '}
-        error={!!errorHandler('email')}
-        {...formik.getFieldProps('email')}
-      />
-      <MuiTelInput
-        fullWidth
-        placeholder='Phone number'
-        variant='standard'
-        sx={{ paddingTop: '16px' }}
-        value={formik.values.phoneNumber}
-        onChange={(value) => formik.setFieldValue('phoneNumber', value)}
-        helperText={errorHandler('phoneNumber') || ' '}
-        error={!!errorHandler('phoneNumber')}
-      />
-      <Button
-        variant='outlined'
-        fullWidth
-        sx={{ marginTop: '10px' }}
-        type='reset'
-        onClick={handleResetForm}
-      >
-        Reset form
-      </Button>
-      <Button variant='contained' fullWidth sx={{ marginTop: '10px' }} type='submit'>
-        Make an appointment
-      </Button>
-    </form>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DesktopDatePicker
+            label='Birthday Date'
+            format='DD/MM/YYYY'
+            disableFuture
+            value={formik.values.birthdayDate}
+            onChange={(value) => formik.setFieldValue('birthdayDate', value)}
+            slotProps={{
+              textField: {
+                variant: 'standard',
+                helperText: errorHandler('birthdayDate') || ' ',
+                error: !!errorHandler('birthdayDate'),
+              },
+            }}
+          />
+        </LocalizationProvider>
+        <CustomSelect
+          title='Sex'
+          options={state.filteredGenders.length ? state.filteredGenders : state.genders}
+          formikProps={formik.getFieldProps('sex')}
+          errorHandler={errorHandler}
+        />
+        <CustomSelect
+          title='City'
+          options={state.filteredCities.length ? state.filteredCities : state.cities}
+          formikProps={formik.getFieldProps('city')}
+          errorHandler={errorHandler}
+        />
+        <CustomSelect
+          title='Doctor speciality'
+          options={
+            state.filteredSpecialities.length ? state.filteredSpecialities : state.specialities
+          }
+          formikProps={formik.getFieldProps('doctorSpeciality')}
+          errorHandler={errorHandler}
+        />
+        <CustomSelect
+          title='Doctor'
+          options={state.filteredDoctors.length ? state.filteredDoctors : state.doctors}
+          formikProps={formik.getFieldProps('doctor')}
+          errorHandler={errorHandler}
+        />
+        <TextField
+          fullWidth
+          id='email'
+          label='Email'
+          type='email'
+          variant='standard'
+          helperText={errorHandler('email') || ' '}
+          error={!!errorHandler('email')}
+          {...formik.getFieldProps('email')}
+        />
+        <MuiTelInput
+          fullWidth
+          placeholder='Phone number'
+          variant='standard'
+          sx={{ paddingTop: '16px' }}
+          value={formik.values.phoneNumber}
+          onChange={(value) => formik.setFieldValue('phoneNumber', value)}
+          helperText={errorHandler('phoneNumber') || ' '}
+          error={!!errorHandler('phoneNumber')}
+        />
+        <Button
+          variant='outlined'
+          fullWidth
+          sx={{ marginTop: '10px' }}
+          type='reset'
+          onClick={handleResetForm}
+        >
+          Reset form
+        </Button>
+        <Button variant='contained' fullWidth sx={{ marginTop: '10px' }} type='submit'>
+          Make an appointment
+        </Button>
+      </form>
+      {openModal && (
+        <SuccessModal
+          openModal={openModal}
+          formValues={formValues!}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
+    </>
   );
 };
