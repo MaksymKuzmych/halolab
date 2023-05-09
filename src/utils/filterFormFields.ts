@@ -5,7 +5,15 @@ import { ICity, IDoctor, IGender, ISpeciality } from '../interfaces';
 
 export const filterGendersBySpecialities = (genders: IGender[], specialities: ISpeciality[]) => {
   return genders.filter((gender) => {
-    return specialities.some((speciality) => speciality.params?.gender === gender.name);
+    return specialities.some((speciality) => {
+      if (gender.name === Gender.MALE) {
+        return speciality.params?.gender !== Gender.FEMALE;
+      }
+      if (gender.name === Gender.FEMALE) {
+        return speciality.params?.gender !== Gender.MALE;
+      }
+      return true;
+    });
   });
 };
 
