@@ -27,6 +27,10 @@ const validateAge = (date: string | null | undefined, speciality: string) => {
   const currentDate = dayjs();
   const patientAge = currentDate.diff(date, 'year');
 
+  if (patientAge < 0) {
+    return false;
+  }
+
   return !(
     (patientAge > TEEN_AGE && speciality === 'Pediatrician') ||
     (patientAge < ELDER_AGE && speciality === 'Geriatrician')

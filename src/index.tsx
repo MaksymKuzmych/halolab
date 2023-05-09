@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { App } from './App';
 
-import './index.scss';
 import 'normalize.css';
+import '@fontsource/roboto/400.css';
+import './index.scss';
 
 const queryClient = new QueryClient();
 
