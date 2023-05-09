@@ -78,9 +78,9 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
       }
 
       if (city) {
-        const currectCity = filteredCities.find((filteredCity) => filteredCity.name === city);
+        const currectCity = filteredCities.filter((filteredCity) => filteredCity.name === city);
 
-        filteredDoctors = filterDoctorsByCity(filteredDoctors, currectCity!);
+        filteredDoctors = filterDoctorsByCity(filteredDoctors, currectCity);
         filteredSpecialities = filterSpecialitiesByDoctors(filteredSpecialities, filteredDoctors);
         filteredGenders = filterGendersBySpecialities(filteredGenders, filteredSpecialities);
       }
