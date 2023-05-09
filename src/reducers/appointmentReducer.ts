@@ -49,11 +49,11 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
 ) => {
   switch (action.type) {
     case ActionType.SET_CITIES:
-      return { ...state, cities: action.payload };
+      return { ...state, cities: action.payload, filteredCities: action.payload };
     case ActionType.SET_SPECIALITIES:
-      return { ...state, specialities: action.payload };
+      return { ...state, specialities: action.payload, filteredSpecialities: action.payload };
     case ActionType.SET_DOCTORS:
-      return { ...state, doctors: action.payload };
+      return { ...state, doctors: action.payload, filteredDoctors: action.payload };
     case ActionType.FILTER_BY_FIELDS:
       const { birthdayDate, sex, city, doctorSpeciality, doctor } = action.payload;
       let filteredGenders = [...state.genders];
@@ -115,10 +115,10 @@ export const appointmentReducer: Reducer<AppointmentState, Action> = (
     case 'RESET_FIELDS':
       return {
         ...state,
-        filteredGenders: [],
-        filteredSpecialities: [],
-        filteredDoctors: [],
-        filteredCities: [],
+        filteredGenders: state.genders,
+        filteredSpecialities: state.specialities,
+        filteredDoctors: state.doctors,
+        filteredCities: state.cities,
       };
     default:
       return state;

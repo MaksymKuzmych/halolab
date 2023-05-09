@@ -131,27 +131,25 @@ export const AppointmentForm = () => {
         </LocalizationProvider>
         <CustomSelect
           title='Sex'
-          options={state.filteredGenders.length ? state.filteredGenders : state.genders}
+          options={state.filteredGenders}
           formikProps={formik.getFieldProps('sex')}
           errorHandler={errorHandler}
         />
         <CustomSelect
           title='City'
-          options={state.filteredCities.length ? state.filteredCities : state.cities}
+          options={state.filteredCities}
           formikProps={formik.getFieldProps('city')}
           errorHandler={errorHandler}
         />
         <CustomSelect
           title='Doctor speciality'
-          options={
-            state.filteredSpecialities.length ? state.filteredSpecialities : state.specialities
-          }
+          options={state.filteredSpecialities}
           formikProps={formik.getFieldProps('doctorSpeciality')}
           errorHandler={errorHandler}
         />
         <CustomSelect
           title='Doctor'
-          options={state.filteredDoctors.length ? state.filteredDoctors : state.doctors}
+          options={state.filteredDoctors}
           formikProps={formik.getFieldProps('doctor')}
           errorHandler={errorHandler}
         />
